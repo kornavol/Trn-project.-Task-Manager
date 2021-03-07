@@ -3,105 +3,169 @@ import { useState } from 'react';
 
 
 /* DB of Tasks */
-let tasks = [
-    {   
-        /* needs as checker uniq tsk. title not suitable because can be a couple with the same name  */
-        id: 1,
-        title: 'testDate',
-        /* for compute a period. Maybe "end time not necessary" */
-        startTime: 1000,
-        endTime: 5000,
-
-        period: 0,
-        /* "status" I'm planning to use as checker. If I click on task, it'll be changed */
-        status: 'active'
-    }
-];
+let tasks = [];
 
 export default function Task() {
-
+    /* adding task to a  DOM */
     const [state, setState] = useState('');
 
-    /* for decelerate start and stop time */
-    let start = null;
-    let end = null;
+    /* start time, declared outside of function because we need to keep a value */
+    let start = 0;
 
-    /*     let TimeCounter = () => {
-            let period = end - start;
-            task[i].period = period;
-    
-        } */
-    
-    let clickBB = () => {
-        /* checker what task is active and start count time */
+    /* Action on a start btn.  */
+    let clickStartB = () => {
+        /* rerendering time first to show start time to another task */
+        setTime(timer)
+
+        start = Date.now();
+        console.log('start', start);
+    }
+
+    /* Action on a stop btn. Compute a period, update period into array and update time of current task   */
+    let clickStopB = () => {
+        let end = Date.now();
+        console.log('end', end);
+
+        let period = end - start;
+        console.log('period', period);
+
         tasks.find((item) => {
             if (item.status == 'active') {
-                /* REPLACE */
-                item.title = 'status active';
-                setState(showTasks)
+                item.period += period;
+
+                setTime(timer);
             }
         })
 
+        console.log('afterstop', tasks);
 
-                /* start = new Date;
-                end = new Date; */
     }
 
+    /* Change status on 'active' if was click on a task. */
+    let statusChanger = (e => {
+        setTime(timer);
 
+        console.log(e.target.id);
 
-    /* Previous version  of click function. Keep because of pass to dom element  */
-    let click = (e) => {
-
-        let target = e.target.parentElement.children[0].textContent;
-   
-        tasks.find((item) => {
-            if (item.title === target) {
-                item.title = "another name";
-
+        tasks.find(item => {
+            if (item.status == 'active') {
+                item.status = '';
             }
-            setState(showTasks)
+        });
 
-        } )
+        tasks.find(item => {
+            if (item.id == e.target.id) {
+                item.status = 'active';
+            }
+        });
+        setState(showTasks);
+        // setTime(timer);
+    });
 
-
-
-    }
 
 
     /* !Tasks rendering */
+
     let showTasks = () => tasks.map(item => {
 
-        return (
-            <div className='task'>
-                <p>{item.title}</p>
-            </div>
-        )
+        if (item.status == 'active') {
+            return (
+                <div
+                    id={item.id}
+                    className='task active'
+                    onClick={statusChanger}
+                >
+                    <p>{item.title}</p>
+                </div>
+            )
+        } else {
+            return (
+                <div
+                    id={item.id}
+                    className='task'
+                    onClick={statusChanger}
+                >
+                    <p>{item.title}</p>
+                </div>
+            )
+        }
     })
 
-    /* Adding new tasks on a page */
-    let Adder = e => {
+    /* Adding new tasks on a page at click on an add button. New task became automate active */
+    let taskAdder = e => {
         e.preventDefault();
         let taskTitle = e.target[0].value;
-        let newTask = { title: taskTitle }
+        /* generae random number to create unique id  */
+        let idNumm = Math.floor(Math.random() * Math.floor(100));
+        let id = taskTitle + idNumm;
+
+        tasks.find(item => {
+            if (item.status == 'active') {
+                item.status = ''
+            }
+        });
+
+        let newTask = {
+            title: taskTitle,
+            id: id,
+            status: 'active',
+            period: 0
+        }
+
         tasks.push(newTask);
         setState(showTasks);
-
-        console.log(tasks);
     }
+
+
+    /* for change time on a page */
+    const [time, setTime] = useState('0d 0h 0m 0s');
+
+    /* Show time  */
+    let timer = () => {
+        let currentTime = 0;
+
+        tasks.find((item) => {
+            if (item.status == 'active') {
+                currentTime = item.period;
+                console.log('currentTime', currentTime);
+            }
+        })
+        /* change ms to normal outlook */
+        let days = Math.floor(currentTime / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((currentTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((currentTime % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((currentTime % (1000 * 60)) / 1000);
+
+        let normTime = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        console.log('period', currentTime)
+        console.log('normtme', normTime)
+
+        if (currentTime > 0) {
+            return normTime;
+        } else {
+            return '0d 0h 0m 0s';
+        }
+    }
+
+
 
     return (
         <div>
-            <button onClick = {clickBB}>Start</button>
-            <button onClick = {clickBB}>Stop</button>
-
-            <form onSubmit={Adder} >
+            <button onClick={clickStartB}>Start</button>
+            <button onClick={clickStopB}>Stop</button>
+            <br />
+            <p>{time}</p>
+            <br />
+            <form onSubmit={taskAdder} >
                 <p>Test</p>
                 <input type="text" />
                 <input type="submit" value="Add" />
             </form>
+            <br />
             {state}
         </div>
     )
-
 
 }
