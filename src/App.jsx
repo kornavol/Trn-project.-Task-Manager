@@ -125,7 +125,7 @@ function App() {
       period: 0
     }
 
-    if (typeof (taskTitle) === 'string' && taskTitle.length == 0) {
+    if (typeof (taskTitle) === 'string' && taskTitle.length == 0 ||taskTitle == "add new task" ) {
       newTask.title = 'NewTask-' + counter;
       counter += 1;
     }
