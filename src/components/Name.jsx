@@ -17,8 +17,8 @@ export default function Name() {
           <div className="name-form">
             
               <form onSubmit = {userNameHandler}>
-                <label for="fname">PLEASE TYPE YOUR NAME</label>
-                <input id="name-input"type="text" />
+                <label className="blink_me">PLEASE FIRST TYPE YOUR NAME</label>
+                <input id="name-input"type="text"/>
                 <input className = "button form-button5" type="submit" value="Send" />
               </form>
             

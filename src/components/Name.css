@@ -16,6 +16,16 @@
 
 }
 
+.blink_me {
+    animation: blinker 2s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+
 #name-input[type=text] {
     width: 100%;
     padding: 12px 20px;
