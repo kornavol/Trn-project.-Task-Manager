@@ -13,7 +13,7 @@
 
 ## To-do:
 
-- write a function which will be check that, if start btn is active, user can switch a task.
+- add a comparison id with DB and if it consist restart math.random
 
 ## Questions
 
