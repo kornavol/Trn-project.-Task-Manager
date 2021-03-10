@@ -14,12 +14,18 @@
 ## To-do:
 
 - add a comparison id with DB and if it consist restart math.random
+- try to use ? (ternary operator) instead if-else
+- create a Name.jsx as page and replace it to app.jsx
+- change all state (rendering new element) in a my project, as in example 13:50
 
 ## Questions
 
 - Why bubbling not working (click on a task)
+    the problem was solved by itself
 - alternative find method but without return
+    forEach and return null as break
 
 ## Bug
 
-- After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong. 
+- After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong;
+- I have an opportunity to create or move to task during tme computing (time counting). Need to fix.  

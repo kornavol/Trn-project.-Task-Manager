@@ -10,11 +10,14 @@ import Timer from './components/Timer.jsx'
 /* DB of Tasks */
 let tasks = [];
 let counter = 1;
+let keyCounter = 0;
 
 function App() {
 
   /* adding task to a  DOM */
   const [taskState, setTaskState] = useState('');
+    /* Start\stop toggle */
+
 
   /* start time, declared outside of function because we need to keep a value */
   let start = 0;
@@ -23,11 +26,11 @@ function App() {
   function BtnShower(e) {
     setstateBtn(() => {
       // console.log(e.target.id);
-      if (e.target.id == 'stopBtn') {
+      if (e.target.id === 'stopBtn') {
         return (
           <button id="srtBtn" className="button form-button5 time-button" onClick={clickStartB}>Start</button>
         )
-      } else if (e.target.id == 'srtBtn') {
+      } else if (e.target.id === 'srtBtn') {
         return (
           <button id="stopBtn" className="button form-button5 time-button" onClick={clickStopB}>Stop</button>
         )
@@ -49,30 +52,37 @@ function App() {
     let end = Date.now();
     let period = end - start;
 
-    tasks.find((item) => {
-      if (item.status == 'active') {
+    tasks.forEach((item) => {
+      if (item.status === 'active') {
         item.period += period;
-
         setTime(timer);
+        return null
       }
     })
     BtnShower(e)
   }
+  
+
+  const [stateBtn, setstateBtn] = useState(
+    <button id="srtBtn" className="button form-button5 time-button" onClick={clickStartB}>Start</button>
+  )
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e => {
     setTime(timer);
 
-    tasks.find(item => {
-      if (item.status == 'active') {
+    tasks.forEach(item => {
+      if (item.status === 'active') {
         item.status = '';
+        return null
       }
     });
 
-    tasks.find(item => {
-      if (item.id == e.target.id) {
+    tasks.forEach(item => {
+      if (item.id === e.target.id) {
         item.status = 'active';
         console.log('statusChanger-task', tasks);
+        return null
       }
     });
 
@@ -82,19 +92,23 @@ function App() {
   /* !Tasks rendering */
 
   let showTasks = () => tasks.map(item => {
+    keyCounter ++;
 
-    if (item.status == 'active') {
+    if (item.status === 'active') {
       return (
         <div
+          key={keyCounter}
           className='task active'
           onClick={statusChanger}
+          id={item.id}
         >
-          <p id={item.id}>{item.title}</p>
+          <p >{item.title}</p>
         </div>
       )
     } else {
       return (
         <div
+          key={keyCounter}
           className='task'
           onClick={statusChanger}
         >
@@ -112,9 +126,10 @@ function App() {
     let idNumm = Math.floor(Math.random() * Math.floor(10000));
     let id = taskTitle + idNumm;
 
-    tasks.find(item => {
-      if (item.status == 'active') {
+    tasks.forEach(item => {
+      if (item.status === 'active') {
         item.status = ''
+        return null
       }
     });
 
@@ -125,7 +140,7 @@ function App() {
       period: 0
     }
 
-    if (typeof (taskTitle) === 'string' && taskTitle.length == 0 ||taskTitle == "add new task" ) {
+    if (taskTitle.length === 0 ||taskTitle === "add new task" ) {
       newTask.title = 'NewTask-' + counter;
       counter += 1;
     }
@@ -142,9 +157,10 @@ function App() {
   let timer = () => {
     let currentTime = 0;
 
-    tasks.find((item) => {
-      if (item.status == 'active') {
+    tasks.forEach((item) => {
+      if (item.status === 'active') {
         currentTime = item.period;
+        return null
       }
     })
     /* change ms to normal outlook */
@@ -163,13 +179,7 @@ function App() {
     }
   }
 
-  /* Start\stop toggle */
-  const [stateBtn, setstateBtn] = useState(() => {
-    return (
-      <button id="srtBtn" className="button form-button5 time-button" onClick={clickStartB}>Start</button>
 
-    )
-  })
 
 
   return (
