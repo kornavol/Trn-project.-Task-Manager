@@ -1,4 +1,14 @@
-## Task:
+## LINKS
+
+static
+<https://kornavol.github.io/Task-Manager/>
+
+dev.
+<https://my-dev-task-manager.herokuapp.com/>
+
+## DESCRIPTION
+
+## Task
 
 <https://www.figma.com/file/7HV64al5VorySNvRKlw2n4/404s-Art-Board?node-id=1021%3A16>
 
@@ -11,7 +21,7 @@
 
 <https://pomofocus.io/>
 
-## To-do:
+## To-do
 
 - add a comparison id with DB and if it consist restart math.random
 - try to use ? (ternary operator) instead if-else
