@@ -27,6 +27,13 @@ dev.
 - try to use ? (ternary operator) instead if-else
 - create a Name.jsx as page and replace it to app.jsx
 - change all state (rendering new element) in a my project, as in example 13:50
+- create a "acordion" for task which will be contain:
+  - status (active, inactive)
+  - data creation
+- implement autorization
+- implement menu (archiv)
+- add countdown to main window
+- add countdown to "bookmark"
 
 ## Questions
 
