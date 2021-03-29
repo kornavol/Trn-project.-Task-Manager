@@ -7,13 +7,16 @@ import "./App.css";
 
 import { useState, useEffect, useRef } from "react";
 
-import Name from "./components/Name.jsx";
-import Task from "./components/Task.jsx";
-import Timer from "./components/Timer.jsx";
+// import Name from "./components/Name.jsx";
+import Task from "./components/Tasks/Tasks.jsx";
+import Timer from "./components/Timer/Timer.jsx";
+import AuthIcons from "./components/AuthIcons.jsx";
+import Auth from "./pages/Auth.jsx";
 
 function App() {
   const start = useRef(0);
   const counter = useRef(1);
+  const routing = useRef(true);
 
   // ?
   const [tasks, setTasks] = useState([]);
@@ -21,6 +24,10 @@ function App() {
   const [taskState, setTaskState] = useState(""); /* adding task to a DOM */
   const [time, setTime] = useState(0); /* for change time on a page */
   const [btn, setBtn] = useState(false); /*  rendering a current button */
+  const [
+    auth,
+    setAuth,
+  ] = useState(); /*  rendering an auth.form with current state */
 
   /* Action on a start btn.  */
   let clickStartB = (e) => {
@@ -96,7 +103,7 @@ function App() {
 
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
-    // NOT WOTKING WITH setTasks. Because setTaskState don't see update from setTasks
+    // NOT WORKING WITH setTasks. Because setTaskState don't see update from setTasks
 
     e.preventDefault();
 
@@ -162,17 +169,34 @@ function App() {
     };
   }, [btn]);
 
+  function authChecker(e) {
+    if (e.target.id === "sign-in") {
+      setAuth(<Auth condition={"SignIn"} />);
+    } else if (e.target.id === "sign-up") {
+      setAuth(<Auth condition={"SignUp"} />);
+    }
+  }
+
   return (
-    <div className="main">
-      <Name />
-      <br />
-      <Timer
-        time={time}
-        btn={btn}
-        clickStartB={clickStartB}
-        clickStopB={clickStopB}
-      />
-      <Task taskAdder={taskAdder} taskState={taskState} />
+    <div>
+      {routing.current ? (
+        <div className="main">
+          <AuthIcons
+            toggle={() => (routing.current = false)}
+            authChecker={authChecker}
+          />
+          <br />
+          <Timer
+            time={time}
+            btn={btn}
+            clickStartB={clickStartB}
+            clickStopB={clickStopB}
+          />
+          <Task taskAdder={taskAdder} taskState={taskState} />
+        </div>
+      ) : (
+        auth
+      )}
     </div>
   );
 }
