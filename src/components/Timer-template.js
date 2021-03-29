@@ -1,7 +1,7 @@
 /* timer template */
 
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 const App = () => {
   const [btn, setBtn] = useState(false);
@@ -21,12 +21,12 @@ const App = () => {
       clearInterval(interval);
     };
   }, [btn]);
-  console.log('rendered');
+  console.log("rendered");
 
   return (
     <main>
       <button onClick={() => setBtn((btn) => !btn)}>
-        {btn ? 'stop' : 'start'}
+        {btn ? "stop" : "start"}
       </button>
       {time}
     </main>

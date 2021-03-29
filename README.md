@@ -44,7 +44,9 @@ dev.
 
 - Why "start" log always  = 0;
 - Why my UseState is executing in the end even if "gate is closet".
-- If  I re-render DOM with active UseEff (in process). This action is cloning the useEffect
+- If I re-render DOM with active UseEff (in process). This action iwill clone the useEffect
+
+- Why return from useEffect fires (willUnmount)? 
 
 ## Bug
 

@@ -1,6 +1,7 @@
 /* 
 Version where I tried to use setTaskState 
-Issue #1: setTime from setTaskState don't work properly
+Issue #2: Incorrect rendering from taskAdder
+
 */
 
 import "./App.css";
@@ -16,7 +17,14 @@ function App() {
   const counter = useRef(1);
 
   // ?
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([
+    {
+      title: "test",
+      id: "id",
+      status: "active",
+      period: 0,
+    },
+  ]);
 
   const [taskState, setTaskState] = useState(""); /* adding task to a DOM */
   const [time, setTime] = useState(0); /* for change time on a page */
@@ -48,6 +56,7 @@ function App() {
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e) => {
+    
     let newTasks = [...tasks];
     newTasks.forEach((item) => {
       if (item.status === "active") {
@@ -56,6 +65,7 @@ function App() {
       }
     });
 
+    
     newTasks.forEach((item) => {
       if (item.id === e.target.id) {
         item.status = "active";
@@ -64,7 +74,7 @@ function App() {
       }
     });
     setTasks(newTasks);
-
+    
     setTaskState(showTasks);
 
     setTime(timer);
@@ -97,14 +107,18 @@ function App() {
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
     // NOT WOTKING WITH setTasks. Because setTaskState don't see update from setTasks
-
+    
     e.preventDefault();
 
+    
+
     let taskTitle = e.target[0].value;
-    let id = taskTitle + counter.current;
+    /* generate random number to create unique id  */
+    let idNumm = Math.floor(Math.random() * Math.floor(10000));
+    let id = taskTitle + idNumm;
 
     // let newTasks = [...tasks];
-
+    
     tasks.forEach((item) => {
       if (item.status === "active") {
         item.status = "";
@@ -126,7 +140,7 @@ function App() {
 
     tasks.push(newTask);
     // setTasks(newTasks);
-    setTime(timer);
+    setTime(timer)
     setTaskState(showTasks);
   };
 

@@ -1,7 +1,4 @@
-/* 
-Version where I tried to use setTaskState 
-Issue #1: setTime from setTaskState don't work properly
-*/
+/* original version with brocken timer */
 
 import "./App.css";
 
@@ -11,13 +8,14 @@ import Name from "./components/Name.jsx";
 import Task from "./components/Task.jsx";
 import Timer from "./components/Timer.jsx";
 
+/* DB of Tasks */
+let tasks = [];
+let counter = 1;
+let keyCounter = 0;
+
 function App() {
   const start = useRef(0);
-  const counter = useRef(1);
-
-  // ?
-  const [tasks, setTasks] = useState([]);
-
+  
   const [taskState, setTaskState] = useState(""); /* adding task to a DOM */
   const [time, setTime] = useState(0); /* for change time on a page */
   const [btn, setBtn] = useState(false); /*  rendering a current button */
@@ -26,6 +24,7 @@ function App() {
   let clickStartB = (e) => {
     setBtn((btn) => !btn);
     start.current = Date.now();
+    console.log("start", start);
   };
 
   /* Action on a stop btn. Compute a period, update period into array and update time of current task   */
@@ -34,50 +33,46 @@ function App() {
     let end = Date.now();
     let period = end - start.current;
 
-    /* It's a good approach */
-    let newTasks = [...tasks];
-    newTasks.forEach((item) => {
+    tasks.forEach((item) => {
       if (item.status === "active") {
         item.period += period;
         return null;
       }
     });
-    setTasks(newTasks);
-    console.log(tasks);
   };
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e) => {
-    let newTasks = [...tasks];
-    newTasks.forEach((item) => {
+    setTime(timer);
+
+    tasks.forEach((item) => {
       if (item.status === "active") {
         item.status = "";
         return null;
       }
     });
 
-    newTasks.forEach((item) => {
+    tasks.forEach((item) => {
       if (item.id === e.target.id) {
         item.status = "active";
         console.log("statusChanger-task", tasks);
         return null;
       }
     });
-    setTasks(newTasks);
 
     setTaskState(showTasks);
-
-    setTime(timer);
   };
 
   /* !Tasks rendering */
 
   let showTasks = () =>
     tasks.map((item) => {
+      keyCounter++;
+
       if (item.status === "active") {
         return (
           <div
-            key={item.id}
+            key={keyCounter}
             className="task active"
             onClick={statusChanger}
             id={item.id}
@@ -87,7 +82,7 @@ function App() {
         );
       } else {
         return (
-          <div key={item.id} className="task" onClick={statusChanger}>
+          <div key={keyCounter} className="task" onClick={statusChanger}>
             <p id={item.id}>{item.title}</p>
           </div>
         );
@@ -96,14 +91,12 @@ function App() {
 
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
-    // NOT WOTKING WITH setTasks. Because setTaskState don't see update from setTasks
-
     e.preventDefault();
-
+    
     let taskTitle = e.target[0].value;
-    let id = taskTitle + counter.current;
-
-    // let newTasks = [...tasks];
+    /* generate random number to create unique id  */
+    let idNumm = Math.floor(Math.random() * Math.floor(10000));
+    let id = taskTitle + idNumm;
 
     tasks.forEach((item) => {
       if (item.status === "active") {
@@ -120,13 +113,11 @@ function App() {
     };
 
     if (taskTitle.length === 0 || taskTitle === "add new task") {
-      newTask.title = "NewTask-" + counter.current;
-      counter.current++;
+      newTask.title = "NewTask-" + counter;
+      counter += 1;
     }
 
     tasks.push(newTask);
-    // setTasks(newTasks);
-    setTime(timer);
     setTaskState(showTasks);
   };
 
@@ -134,15 +125,12 @@ function App() {
   let timer = () => {
     let currentTime = 0;
 
-    let newTasks = [...tasks];
     tasks.forEach((item) => {
       if (item.status === "active") {
         currentTime = item.period;
         return null;
       }
     });
-
-    setTasks(newTasks);
 
     return currentTime;
   };
@@ -153,8 +141,8 @@ function App() {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 1000);
       }, 1000);
-    }
-    // else {
+      } 
+  // else {
     //   clearInterval(interval);
     // }
     return () => {

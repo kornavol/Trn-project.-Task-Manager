@@ -1,7 +1,6 @@
 /* 
-Version where I tried to use setTaskState 
-Issue #1: setTime from setTaskState don't work properly
-*/
+Everything works, but I don't use setTask, change directly a tasks array
+ */
 
 import "./App.css";
 
@@ -16,7 +15,14 @@ function App() {
   const counter = useRef(1);
 
   // ?
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([
+    {
+      title: "test",
+      id: "id",
+      status: "active",
+      period: 0,
+    },
+  ]);
 
   const [taskState, setTaskState] = useState(""); /* adding task to a DOM */
   const [time, setTime] = useState(0); /* for change time on a page */
@@ -34,40 +40,32 @@ function App() {
     let end = Date.now();
     let period = end - start.current;
 
-    /* It's a good approach */
-    let newTasks = [...tasks];
-    newTasks.forEach((item) => {
+    tasks.forEach((item) => {
       if (item.status === "active") {
         item.period += period;
         return null;
       }
     });
-    setTasks(newTasks);
-    console.log(tasks);
   };
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e) => {
-    let newTasks = [...tasks];
-    newTasks.forEach((item) => {
+    tasks.forEach((item) => {
       if (item.status === "active") {
         item.status = "";
         return null;
       }
     });
 
-    newTasks.forEach((item) => {
+    tasks.forEach((item) => {
       if (item.id === e.target.id) {
         item.status = "active";
-        console.log("statusChanger-task", tasks);
         return null;
       }
     });
-    setTasks(newTasks);
+    setTime(timer);
 
     setTaskState(showTasks);
-
-    setTime(timer);
   };
 
   /* !Tasks rendering */
@@ -96,14 +94,11 @@ function App() {
 
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
-    // NOT WOTKING WITH setTasks. Because setTaskState don't see update from setTasks
-
     e.preventDefault();
-
     let taskTitle = e.target[0].value;
-    let id = taskTitle + counter.current;
-
-    // let newTasks = [...tasks];
+    /* generate random number to create unique id  */
+    let idNumm = Math.floor(Math.random() * Math.floor(10000));
+    let id = taskTitle + idNumm;
 
     tasks.forEach((item) => {
       if (item.status === "active") {
@@ -125,8 +120,7 @@ function App() {
     }
 
     tasks.push(newTask);
-    // setTasks(newTasks);
-    setTime(timer);
+    setTime(timer)
     setTaskState(showTasks);
   };
 
@@ -134,15 +128,12 @@ function App() {
   let timer = () => {
     let currentTime = 0;
 
-    let newTasks = [...tasks];
     tasks.forEach((item) => {
       if (item.status === "active") {
         currentTime = item.period;
         return null;
       }
     });
-
-    setTasks(newTasks);
 
     return currentTime;
   };
