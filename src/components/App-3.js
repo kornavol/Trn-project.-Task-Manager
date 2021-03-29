@@ -12,42 +12,35 @@ let tasks = [];
 let counter = 1;
 let keyCounter = 0;
 let eff = 0;
+let log1 = [];
+let log2 = [];
+let appLog = []
 
 // let effect = false;
 
 function App() {
-  // const [effect, seteffect] = useState(false);
-
   const ref = useRef('stop')
 
-
-
-  /* adding task to a  DOM */
-  const [taskState, setTaskState] = useState('');
+  const [taskState, setTaskState] = useState('');   /* adding task to a DOM */
+  const [time, setTime] = useState(0);              /* for change time on a page */
+  const [stateBtn, setStateBtn] = useState(true);   /*  rendering a current button */
+  
+  
   /* Start\stop toggle */
-
-
   /* start time, declared outside of function because we need to keep a value */
   let start = 0;
-
 
   /* rendering Start\stop button  */
   function BtnShower(e) {
     setStateBtn(() => {
       // console.log(e.target.id);
-      if (e.target.id === 'stopBtn') {
+      if (e.target.id === 'stopBtn') { 
         // console.log('stop');
-
         // alert(JSON.stringify(ref.current))
-
-        return (
-          <button id="srtBtn" className="button form-button5 time-button" onClick={clickStartB}>Start</button>
-        )
+        return true
       } else if (e.target.id === 'srtBtn') {
-        return (
-          <button id="stopBtn" className="button form-button5 time-button" onClick={clickStopB}>Stop</button>
-        )
-      }
+        return false
+       }
     })
   }
 
@@ -56,7 +49,7 @@ function App() {
     // seteffect((prev) => !prev);
     ref.current = 'start';
 
-    /* rerendering time first to show start time to another task */
+    /* re-rendering time first to show start time point for another task */
     // setTime(timer)
     BtnShower(e)
     start = Date.now();
@@ -66,7 +59,9 @@ function App() {
   /* Action on a stop btn. Compute a period, update period into array and update time of current task   */
   let clickStopB = (e) => {
     ref.current = 'stop';
-    // seteffect((prev) => !prev);
+    console.log(log1);
+    console.log(log2);
+    console.log(appLog);
 
 
     let end = Date.now();
@@ -79,13 +74,8 @@ function App() {
         return null
       }
     })
-    BtnShower(e)
+    // BtnShower(e)
   }
-
-
-  const [stateBtn, setStateBtn] = useState(
-    <button id="srtBtn" className="button form-button5 time-button" onClick={clickStartB}>Start</button>
-  )
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e => {
@@ -170,8 +160,7 @@ function App() {
   }
 
 
-  /* for change time on a page */
-  const [time, setTime] = useState(0);
+  
 
   /* Show time  */
   let timer = () => {
@@ -191,22 +180,21 @@ function App() {
 
   useEffect(() => {
     console.log('useEffs', ref.current);
+    log1.push(ref.current)
     if (ref.current === 'start') {
-      // console.log('useEffs', ref.current);
+      console.log('into - useEffs', ref.current);
+      log2.push(ref.current)
       eff++;
-
-
-
       setTimeout(() => {
         setTime((prev) => prev + 1000);
-
-      }, 1000);
+      }, 5000);
     }
-  },[time])
+  },)
 
 
 
-  // console.log('App');
+  console.log('App');
+  appLog.push(ref.current)
   // console.log('time', time);
   // console.log('effect', ref.current);
   // console.log('startpoint', start);
@@ -221,6 +209,8 @@ function App() {
       <Timer
         time={time}
         stateBtn={stateBtn}
+        clickStartB ={clickStartB}
+        clickStopB = {clickStopB}
       />
       <Task
         taskAdder={taskAdder}

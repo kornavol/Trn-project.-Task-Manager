@@ -42,6 +42,10 @@ dev.
 - alternative find method but without return
     forEach and return null as break
 
+- Why "start" log always  = 0;
+- Why my UseState is executing in the end even if "gate is closet".
+- If  I re-render DOM with active UseEff (in process). This action is cloning the useEffect
+
 ## Bug
 
 - After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong;
