@@ -23,17 +23,11 @@ dev.
 
 ## To-do
 
-- add a comparison id with DB and if it consist restart math.random
-- try to use ? (ternary operator) instead if-else
-- create a Name.jsx as page and replace it to app.jsx
-- change all state (rendering new element) in a my project, as in example 13:50
 - create a "accordion" for task which will be contain:
   - status (active, inactive)
   - data creation
 - implement authorization
-- implement menu (archive)
-- add countdown to main window
-- add countdown to "bookmark"
+- align all content to center (horizontally)
 
 ## Questions
 
@@ -46,9 +40,10 @@ dev.
 - Why my UseState is executing in the end even if "gate is closet".
 - If I re-render DOM with active UseEff (in process). This action iwill clone the useEffect
 
-- Why return from useEffect fires (willUnmount)? 
+- Why return from useEffect fires (willUnmount)?
 
 ## Bug
 
 - After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong;
-- I have an opportunity to create or move to task during tme computing (time counting). Need to fix.  
+- I have an opportunity to create or move to task during tme computing (time counting). Need to fix.
+- When I click to SignIn-SignUp toggle. It doesn't occur first time .

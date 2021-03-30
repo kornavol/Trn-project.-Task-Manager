@@ -32,12 +32,12 @@ export default function SignUp(props) {
         fetch(url, options).then(result => result.json().then(output => {
             // console.log(output);
             let status = output.status;
-            if (status == 'failed') {
+            if (status === 'failed') {
                 setMsg('')
                 /* assign element instead just massage_, because wanna reveal text with animation  */
                 setMsg(<h4 className="fadeIn color-yellow">{'this email is already in use. Please try another'}</h4>)
 
-            } else if (status == 'success') {
+            } else if (status === 'success') {
                 setMsg('')
                 /* assign element instead just massage_, because wanna reveal text with animation  */
                 setMsg(<h4 className="fadeIn color-white">{output.message}</h4>)

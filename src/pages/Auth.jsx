@@ -25,7 +25,7 @@ export default function Authorization({ condition }) {
   const [btn, setBtn] = useState(element);
 
   function toggle() {
-    if (initBtn == "SignUp") {
+    if (initBtn === "SignUp") {
       setBtn(
         <SignUp
           toggle={toggle}
@@ -33,7 +33,7 @@ export default function Authorization({ condition }) {
         />
       );
       initBtn = "SignIn";
-    } else if (initBtn == "SignIn") {
+    } else if (initBtn === "SignIn") {
       setBtn(
         <SignIn
           toggle={toggle}

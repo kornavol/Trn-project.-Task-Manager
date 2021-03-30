@@ -32,7 +32,7 @@ export default function Login(props) {
             /* for send stats to App.js  */
             props.statusChecker(status);
             /* show a warning */
-            if (status == 'failed') {
+            if (status === 'failed') {
                 /* This structure kinda reset a text for show aan animation */
                 setMsg('')
                 /* assign element instead just massage_, because wanna reveal text with animation  */

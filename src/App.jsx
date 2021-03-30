@@ -161,10 +161,11 @@ function App() {
         setTime((prevTime) => prevTime + 1000);
       }, 1000);
     }
-    // else {
-    //   clearInterval(interval);
-    // }
+    else {
+      clearInterval(interval);
+    }
     return () => {
+      console.log('componentWillAnmount');
       clearInterval(interval);
     };
   }, [btn]);
