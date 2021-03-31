@@ -1,3 +1,7 @@
+/* 
+Still use a useState to rendering tasks
+*/
+
 import "./App.css";
 
 import { useState, useEffect, useRef, useContext } from "react";
@@ -11,15 +15,21 @@ import AuthIcons from "./components/AuthIcons.jsx";
 import Auth from "./pages/Auth.jsx";
 
 function App() {
-  const start = useRef(0); /* to keep a start time independently from a render*/
-  const counter = useRef(1);  /* to increase counter independently from a render. Using for tasks Id nd key*/
+  const start = useRef(0);                          /* to keep a start time independently from a render*/
+  const counter = useRef(1);                        /* to increase counter independently from a render. Using for tasks Id nd key*/
 
-  const routing = useContext(AuthChecker);
+  const routing = useContext(AuthChecker);          
 
-  const [tasks, setTasks] = useState([]); /* DB */
-  const [time, setTime] = useState(0); /* for change time on a page */
-  const [btn, setBtn] = useState(false); /*  rendering a current button */
-  const [auth,setAuth,] = useState(); /*  rendering an auth.form with current state */
+  const [tasks, setTasks] = useState([]);
+  const [taskState, setTaskState] = useState("");   /* adding new task to a DOM */
+  const [time, setTime] = useState(0);              /* for change time on a page */
+  const [btn, setBtn] = useState(false);            /*  rendering a current button */
+  const [auth,setAuth,] = useState();               /*  rendering an auth.form with current state */
+
+//   /* render new task in changing in DB (tasks) */
+  useEffect(() => {
+    setTaskState(showTasks);
+  }, [tasks]);
 
   /* Action on a start btn.  */
   let clickStartB = (e) => {
@@ -65,27 +75,28 @@ function App() {
     setTime(timer);
   };
 
-  /* Tasks rendering. Executing by each App rendering  */
-  let showTasks = tasks.map((item) => {
-    if (item.status === "active") {
-      return (
-        <div
-          key={item.id}
-          className="task active"
-          onClick={statusChanger}
-          id={item.id}
-        >
-          <p>{item.title}</p>
-        </div>
-      );
-    } else {
-      return (
-        <div key={item.id} className="task" onClick={statusChanger}>
-          <p id={item.id}>{item.title}</p>
-        </div>
-      );
-    }
-  });
+  /* !Tasks rendering */
+  let showTasks = () =>
+  tasks.map((item) => {
+      if (item.status === "active") {
+        return (
+          <div
+            key={item.id}
+            className="task active"
+            onClick={statusChanger}
+            id={item.id}
+          >
+            <p>{item.title}</p>
+          </div>
+        );
+      } else {
+        return (
+          <div key={item.id} className="task" onClick={statusChanger}>
+            <p id={item.id}>{item.title}</p>
+          </div>
+        );
+      }
+    });
 
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
@@ -117,9 +128,10 @@ function App() {
 
     newTasks.push(newTask);
     setTasks(newTasks);
+
     setTime(timer);
   };
-
+  
   /* Show time  */
   let timer = () => {
     let currentTime = 0;

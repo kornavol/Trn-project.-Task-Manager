@@ -2,12 +2,11 @@ import "./Login.css";
 
 import { useState, useContext } from "react";
 
-import AuthChecker from '../../context/AuthChecker.jsx'
+import AuthChecker from "../../context/AuthChecker.jsx";
 
 export default function Login(props) {
   const [msg, setMsg] = useState("");
-  const authChecker = useContext(AuthChecker)
-  console.log(authChecker);
+  const authChecker = useContext(AuthChecker);
 
   /* Find a button over Event. The target is an id of button. We don't use a name or value because they can be changed f.e. translator  */
   let submitHandler = (e) => {
@@ -17,7 +16,6 @@ export default function Login(props) {
     data.email = e.target[0].value;
     data.pass = e.target[1].value;
 
-    //console.log(e.target);
     let url = "https://auth404.herokuapp.com/api/auth/login";
     let options = {
       method: "POST",
@@ -30,12 +28,12 @@ export default function Login(props) {
     fetch(url, options).then((result) =>
       result.json().then((output) => {
         let status = output.status;
+
         /* for send stats to App.js  */
-        // props.statusChecker(status);
-        if (status === 'success') {
-            authChecker.setStatus(true);
+        if (status === "success") {
+          authChecker.setStatus(true);
         }
-        
+
         /* show a warning */
         if (status === "failed") {
           /* This structure kinda reset a text for show aan animation */
@@ -65,7 +63,6 @@ export default function Login(props) {
 
   return (
     <div className="wrapper fadeInDown">
-      {/* <h4 className="fadeIn fourth">{msg}</h4> */}
       {msg}
       <div className="formContent">
         {/* Tabs Titles */}

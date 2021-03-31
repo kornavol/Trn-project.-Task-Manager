@@ -47,9 +47,8 @@ export default function SignUp(props) {
           /* assign element instead just massage_, because wanna reveal text with animation  */
           setMsg(<h4 className="fadeIn color-white">{output.message}</h4>);
           /* Delay to show a customer a message  */
-          setTimeout(() => authChecker.setStatus(true),4000);
+          setTimeout(() => authChecker.setStatus(true), 4000);
         }
-        
       })
     );
   };
@@ -80,10 +79,6 @@ export default function SignUp(props) {
           Sign In{" "}
         </h2>
         <h2 className="active">Sign Up </h2>
-        {/* Icon */}
-        {/* <div className="fadeIn first ">
-                    <img className="userLogo" src={userLogo} id="icon" alt="User Icon" />
-                </div> */}
         {/* Login Form */}
         <form className="login" onSubmit={submitHandler}>
           <input
@@ -130,10 +125,8 @@ export default function SignUp(props) {
             defaultValue="Sign Up"
           />
         </form>
-        {/* Remind Password */}
-        <div className="formFooter">
-          {/* <a className="underlineHover" href="#">Forgot Password?</a> */}
-        </div>
+        {/* <div className="formFooter">
+        </div> */}
       </div>
     </div>
   );
