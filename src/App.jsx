@@ -134,8 +134,7 @@ function App() {
 
     setTime(timer);
   };
-  console.log(tasks, taskState);
-
+  
   /* Show time  */
   let timer = () => {
     let currentTime = 0;
@@ -147,9 +146,6 @@ function App() {
         return null;
       }
     });
-
-    // setTasks(newTasks);
-    // }
     return currentTime;
   };
 
