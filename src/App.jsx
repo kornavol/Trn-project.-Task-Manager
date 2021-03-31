@@ -5,7 +5,9 @@ Issue #1: setTime from setTaskState don't work properly
 
 import "./App.css";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+
+import AuthChecker from "./context/AuthChecker.jsx";
 
 // import Name from "./components/Name.jsx";
 import Task from "./components/Tasks/Tasks.jsx";
@@ -14,20 +16,21 @@ import AuthIcons from "./components/AuthIcons.jsx";
 import Auth from "./pages/Auth.jsx";
 
 function App() {
-  const start = useRef(0);
-  const counter = useRef(1);
-  const routing = useRef(true);
+  const start = useRef(0);                          /* to keep a start time independently from a render*/
+  const counter = useRef(1);                        /* to increase counter independently from a render. Using for tasks Id nd key*/
 
-  // ?
+  const routing = useContext(AuthChecker);          
+
   const [tasks, setTasks] = useState([]);
+  const [taskState, setTaskState] = useState("");   /* adding task to a DOM */
+  const [time, setTime] = useState(0);              /* for change time on a page */
+  const [btn, setBtn] = useState(false);            /*  rendering a current button */
+  const [auth,setAuth,] = useState();               /*  rendering an auth.form with current state */
 
-  const [taskState, setTaskState] = useState(""); /* adding task to a DOM */
-  const [time, setTime] = useState(0); /* for change time on a page */
-  const [btn, setBtn] = useState(false); /*  rendering a current button */
-  const [
-    auth,
-    setAuth,
-  ] = useState(); /*  rendering an auth.form with current state */
+  /* render new task in changing in DB (tasks) */
+  useEffect(() => {
+    setTaskState(showTasks);
+  }, [tasks]);
 
   /* Action on a start btn.  */
   let clickStartB = (e) => {
@@ -50,7 +53,6 @@ function App() {
       }
     });
     setTasks(newTasks);
-    console.log(tasks);
   };
 
   /* Change status on 'active' if was click on a task. */
@@ -66,14 +68,12 @@ function App() {
     newTasks.forEach((item) => {
       if (item.id === e.target.id) {
         item.status = "active";
-        console.log("statusChanger-task", tasks);
         return null;
       }
     });
+
     setTasks(newTasks);
-
     setTaskState(showTasks);
-
     setTime(timer);
   };
 
@@ -103,16 +103,14 @@ function App() {
 
   /* Adding new tasks on a page at click on an add button. New task became automate active */
   let taskAdder = (e) => {
-    // NOT WORKING WITH setTasks. Because setTaskState don't see update from setTasks
-
     e.preventDefault();
 
     let taskTitle = e.target[0].value;
     let id = taskTitle + counter.current;
 
-    // let newTasks = [...tasks];
+    let newTasks = [...tasks];
 
-    tasks.forEach((item) => {
+    newTasks.forEach((item) => {
       if (item.status === "active") {
         item.status = "";
         return null;
@@ -131,26 +129,27 @@ function App() {
       counter.current++;
     }
 
-    tasks.push(newTask);
-    // setTasks(newTasks);
+    newTasks.push(newTask);
+    setTasks(newTasks);
+
     setTime(timer);
-    setTaskState(showTasks);
   };
+  console.log(tasks, taskState);
 
   /* Show time  */
   let timer = () => {
     let currentTime = 0;
-
+    // if (tasks.length>0) {
     let newTasks = [...tasks];
-    tasks.forEach((item) => {
+    newTasks.forEach((item) => {
       if (item.status === "active") {
         currentTime = item.period;
         return null;
       }
     });
 
-    setTasks(newTasks);
-
+    // setTasks(newTasks);
+    // }
     return currentTime;
   };
 
@@ -160,12 +159,10 @@ function App() {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 1000);
       }, 1000);
-    }
-    else {
+    } else {
       clearInterval(interval);
     }
     return () => {
-      console.log('componentWillAnmount');
       clearInterval(interval);
     };
   }, [btn]);
@@ -178,12 +175,14 @@ function App() {
     }
   }
 
+  console.log("app was updated");
+
   return (
     <div>
-      {routing.current ? (
+      {routing.status ? (
         <div className="main">
           <AuthIcons
-            toggle={() => (routing.current = false)}
+            toggle={() => routing.setStatus(false)}
             authChecker={authChecker}
           />
           <br />

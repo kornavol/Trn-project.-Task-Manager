@@ -4,10 +4,13 @@ import "./index.css";
 import App from "./App.jsx";
 import App1 from "./AppTest.js";
 import reportWebVitals from "./reportWebVitals";
+import ProviderAuthChecker from "./context/Provider-AuthChecker.jsx";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ProviderAuthChecker>
+      <App />
+    </ProviderAuthChecker>
   </React.StrictMode>,
   document.getElementById("root")
 );
