@@ -38,12 +38,12 @@ dev.
 
 - Why "start" log always  = 0;
 - Why my UseState is executing in the end even if "gate is closet".
-- If I re-render DOM with active UseEff (in process). This action iwill clone the useEffect
+- If I re-render DOM with active UseEff (in process). This action will clone the useEffect
 
 - Why return from useEffect fires (willUnmount)?
 
 ## Bug
 
 - After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong;
-- I have an opportunity to create or move to task during tme computing (time counting). Need to fix.
+- I have an opportunity to create or move to task during time computing (time counting). Need to fix.
 - When I click to SignIn-SignUp toggle. It doesn't occur first time .
