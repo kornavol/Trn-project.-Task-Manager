@@ -12,14 +12,20 @@ import Auth from "./pages/Auth.jsx";
 
 function App() {
   const start = useRef(0); /* to keep a start time independently from a render*/
-  const counter = useRef(1);  /* to increase counter independently from a render. Using for tasks Id nd key*/
+  const counter =
+    useRef(
+      1
+    ); /* to increase counter independently from a render. Using for tasks Id nd key*/
 
   const routing = useContext(AuthChecker);
+
+  console.log(routing);
 
   const [tasks, setTasks] = useState([]); /* DB */
   const [time, setTime] = useState(0); /* for change time on a page */
   const [btn, setBtn] = useState(false); /*  rendering a current button */
-  const [auth,setAuth,] = useState(); /*  rendering an auth.form with current state */
+  const [auth, setAuth] =
+    useState(); /*  rendering an auth.form with current state */
 
   /* Action on a start btn.  */
   let clickStartB = (e) => {
@@ -66,7 +72,7 @@ function App() {
   };
 
   /* Tasks rendering. Executing by each App rendering  */
-  let showTasks = tasks.map((item) => {
+  const showTasks = tasks.map((item) => {
     if (item.status === "active") {
       return (
         <div
@@ -92,7 +98,7 @@ function App() {
     e.preventDefault();
 
     let taskTitle = e.target[0].value;
-    let id = taskTitle + counter.current;
+    // let id = taskTitle + counter.current;
 
     let newTasks = [...tasks];
 
@@ -105,8 +111,8 @@ function App() {
 
     let newTask = {
       title: taskTitle,
-      id: id,
-      status: "active",
+      // id: id,
+      status: "",
       period: 0,
     };
 
@@ -115,9 +121,42 @@ function App() {
       counter.current++;
     }
 
+  
+
+    /* Back-end part */
+    
+
+    const url = "http://localhost:8080/tasks/new";
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    };
+    console.log("newTask", newTask);
+    fetch(url, options).then((data) =>
+      data.json().then((output) => {
+        console.log("output", output);
+
+        newTask.id = output._id
+        })
+    );
+
+    newTask.status = "active"; // so far fo back-end
+
     newTasks.push(newTask);
+
     setTasks(newTasks);
     setTime(timer);
+
+    console.log(newTasks);
+
+
+
+
+
+
   };
 
   /* Show time  */
@@ -146,6 +185,22 @@ function App() {
       clearInterval(interval);
     };
   }, [btn]);
+
+  useEffect(() => {
+    const url = "http://localhost:8080/tasks/all";
+    const options = {
+      // headers: {
+      //     'x-auth-tocken': localStorage.getItem('token')
+      // }
+    };
+
+    fetch(url).then((data) =>
+      data.json().then((tasks) => {
+        setTasks(tasks);
+      })
+    );
+    console.log('from useEff');
+  }, []);
 
   /* Checking wish button was clicked in order to return <Auth> in correct state   */
   function authChecker(e) {
