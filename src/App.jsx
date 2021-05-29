@@ -5,10 +5,11 @@ import { useState, useEffect, useRef, useContext } from "react";
 import AuthChecker from "./context/AuthChecker.jsx";
 
 // import Name from "./components/Name.jsx";
-import Task from "./components/Tasks/Tasks.jsx";
 import Timer from "./components/Timer/Timer.jsx";
 import AuthIcons from "./components/AuthIcons.jsx";
 import Auth from "./pages/Auth.jsx";
+import Tasks from "./components/Tasks/Tasks.jsx";
+import Task from "./components/Tasks/Task.jsx";
 
 function App() {
   const start = useRef(0); /* to keep a start time independently from a render*/
@@ -18,8 +19,6 @@ function App() {
     ); /* to increase counter independently from a render. Using for tasks Id nd key*/
 
   const routing = useContext(AuthChecker);
-
-  console.log(routing);
 
   const [tasks, setTasks] = useState([]); /* DB */
   const [time, setTime] = useState(0); /* for change time on a page */
@@ -61,7 +60,7 @@ function App() {
     });
 
     newTasks.forEach((item) => {
-      if (item.id === e.target.id) {
+      if (item._id === e.target.id || item._id === e.target.parentNode.id) {
         item.status = "active";
         return null;
       }
@@ -71,24 +70,48 @@ function App() {
     setTime(timer);
   };
 
+  const deleteTask = (id) => {
+    /* Doesn't have sense to do it. Because App.jsx will be remount and we get all information from back. But keeping it because it's a proper way */
+    const newTasks = tasks.filter((task) => {
+      if (task._id !== id) {
+        return task;
+      }
+    });
+    console.log("New Task", newTasks );
+    setTasks(newTasks);
+  };
+
   /* Tasks rendering. Executing by each App rendering  */
   const showTasks = tasks.map((item) => {
     if (item.status === "active") {
       return (
-        <div
-          key={item.id}
-          className="task active"
-          onClick={statusChanger}
-          id={item.id}
-        >
-          <p>{item.title}</p>
-        </div>
+        <Task
+          class={"task active"}
+          item={item}
+          deletefromDB={deleteTask}
+          statusChanger={statusChanger}
+        />
+
+        // <div
+        //   key={item._id}
+        //   className="task active"
+        //   onClick={statusChanger}
+        //   id={item._id}
+        // >
+        //   <p>{item.title}</p>
+        // </div>
       );
     } else {
       return (
-        <div key={item.id} className="task" onClick={statusChanger}>
-          <p id={item.id}>{item.title}</p>
-        </div>
+        <Task
+          class={"task"}
+          item={item}
+          deletefromDB={deleteTask}
+          statusChanger={statusChanger}
+        />
+        // <div key={item._id} className="task" onClick={statusChanger}>
+        //   <p id={item._id}>{item.title}</p>
+        // </div>
       );
     }
   });
@@ -121,10 +144,7 @@ function App() {
       counter.current++;
     }
 
-  
-
     /* Back-end part */
-    
 
     const url = "http://localhost:8080/tasks/new";
     const options = {
@@ -134,29 +154,18 @@ function App() {
       },
       body: JSON.stringify(newTask),
     };
-    console.log("newTask", newTask);
+
     fetch(url, options).then((data) =>
       data.json().then((output) => {
-        console.log("output", output);
-
-        newTask.id = output._id
-        })
+        newTask._id = output._id;
+      })
     );
 
     newTask.status = "active"; // so far fo back-end
-
     newTasks.push(newTask);
 
     setTasks(newTasks);
     setTime(timer);
-
-    console.log(newTasks);
-
-
-
-
-
-
   };
 
   /* Show time  */
@@ -199,7 +208,6 @@ function App() {
         setTasks(tasks);
       })
     );
-    console.log('from useEff');
   }, []);
 
   /* Checking wish button was clicked in order to return <Auth> in correct state   */
@@ -211,7 +219,7 @@ function App() {
     }
   }
 
-  console.log("app was updated");
+  console.log("App was updated");
 
   return (
     <div>
@@ -228,7 +236,7 @@ function App() {
             clickStartB={clickStartB}
             clickStopB={clickStopB}
           />
-          <Task taskAdder={taskAdder} taskState={showTasks} />
+          <Tasks taskAdder={taskAdder} taskState={showTasks} />
         </div>
       ) : (
         auth
