@@ -86,6 +86,7 @@ function App() {
     if (item.status === "active") {
       return (
         <Task
+          key = {item._id}
           class={"task active"}
           item={item}
           deletefromDB={deleteTask}

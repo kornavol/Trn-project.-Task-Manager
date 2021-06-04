@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Task(props) {
   const [isEditable, setisEditable] = useState(false);
   const editedTask = { _id: props.item._id };
+  const isClickable = useRef(true);
 
   const editCardHandler = (e) => {
     const id = e.target.getAttribute("data-id");
@@ -28,21 +29,21 @@ export default function Task(props) {
       method: "DELETE",
     };
 
-    fetch(url, options).then((res) =>
-      res.json().then((output) => {
-        // if (output.status === 'success') {
-        //   props.statusChanger
-        // } else {
-        //   alert(output.message)
-        // }
-
-        if (output.status === "success") {
-          props.deletefromDB(itemID);
-        } else {
-          console.log(output.messege);
-        }
-      })
-    );
+    /* Protection from doble click */
+    if (isClickable.current === true) {
+      isClickable.current = false;
+      
+      fetch(url, options).then((res) =>
+        res.json().then((output) => {
+          if (output.status === "success") {
+            isClickable.current = true;
+            props.deletefromDB(itemID);
+          } else {
+            console.log(output.messege);
+          }
+        })
+      );
+    }
   }
 
   function EditTask() {
