@@ -1,9 +1,16 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+
+import AuthChecker from "../../context/AuthChecker";
 
 export default function Task(props) {
-  const [isEditable, setisEditable] = useState(false);
+  // const [isEditable, setisEditable] = useState(false);
   const editedTask = { _id: props.item._id };
+
   const isClickable = useRef(true);
+
+  const routing = useContext(AuthChecker);
+
+  console.log('isEditable from Task:  ',routing.isEditable);
 
   const editCardHandler = (e) => {
     const id = e.target.getAttribute("data-id");
@@ -47,10 +54,10 @@ export default function Task(props) {
   }
 
   function EditTask() {
-    setisEditable(!isEditable);
+    routing.setisEditable(!routing.isEditable);
   }
 
-  async function SaveTask() {
+  function SaveTask(e) {
     const url = "http://localhost:8080/tasks/update";
     const options = {
       method: "POST",
@@ -59,13 +66,19 @@ export default function Task(props) {
       },
       body: JSON.stringify(editedTask),
     };
-    setisEditable(!isEditable);
+    
+    routing.setisEditable(!routing.isEditable);
+    
+    /* !!!Ask Buelent why it's not working */
+    props.statusChanger(e,true)
 
-    await fetch(url, options).then((res) =>
+    fetch(url, options).then((res) =>
       res.json().then((output) => console.log(output.message))
     );
 
-    console.log(editedTask);
+    // console.log(editedTask);
+
+    
   }
 
   return (
@@ -77,14 +90,14 @@ export default function Task(props) {
     >
       <p
         data-id="title"
-        contentEditable={isEditable}
+        contentEditable={routing.isEditable}
         onKeyPress={editCheckHandler}
         onBlur={editCardHandler}
       >
         {props.item.title}
       </p>
       <div className="buttons">
-        {isEditable ? (
+        {routing.isEditable ? (
           <button onClick={SaveTask}>💾</button>
         ) : (
           <button onClick={EditTask}>✏️</button>

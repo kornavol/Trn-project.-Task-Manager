@@ -51,23 +51,29 @@ function App() {
 
   /* Change status on 'active' if was click on a task. */
   let statusChanger = (e) => {
-    let newTasks = [...tasks];
-    newTasks.forEach((item) => {
-      if (item.status === "active") {
-        item.status = "";
-        return null;
-      }
-    });
+    console.log('isEditable from App:  ', routing.isEditable);
 
-    newTasks.forEach((item) => {
-      if (item._id === e.target.id || item._id === e.target.parentNode.id) {
-        item.status = "active";
-        return null;
-      }
-    });
+    if (!routing.isEditable) {
+      console.log('isEditable from IF:  ', routing.isEditable);
 
-    setTasks(newTasks);
-    setTime(timer);
+      let newTasks = [...tasks];
+      newTasks.forEach((item) => {
+        if (item.status === "active") {
+          item.status = "";
+          return null;
+        }
+      });
+
+      newTasks.forEach((item) => {
+        if (item._id === e.target.id || item._id === e.target.parentNode.id) {
+          item.status = "active";
+          return null;
+        }
+      });
+
+      setTasks(newTasks);
+      setTime(timer);
+    }
   };
 
   const deleteTask = (id) => {
@@ -77,7 +83,7 @@ function App() {
         return task;
       }
     });
-    console.log("New Task", newTasks );
+    console.log("New Task", newTasks);
     setTasks(newTasks);
   };
 
@@ -86,7 +92,7 @@ function App() {
     if (item.status === "active") {
       return (
         <Task
-          key = {item._id}
+          key={item._id}
           class={"task active"}
           item={item}
           deletefromDB={deleteTask}
@@ -105,6 +111,7 @@ function App() {
     } else {
       return (
         <Task
+          key={item._id}
           class={"task"}
           item={item}
           deletefromDB={deleteTask}
