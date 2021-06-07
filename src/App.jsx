@@ -50,10 +50,10 @@ function App() {
   };
 
   /* Change status on 'active' if was click on a task. */
-  let statusChanger = (e) => {
+  let statusChanger = (e,t) => {
     console.log('isEditable from App:  ', routing.isEditable);
 
-    if (!routing.isEditable) {
+    if (!routing.isEditable || t) {
       console.log('isEditable from IF:  ', routing.isEditable);
 
       let newTasks = [...tasks];
