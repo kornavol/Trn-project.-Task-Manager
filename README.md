@@ -6,6 +6,10 @@ static
 dev.
 <https://my-dev-task-manager.herokuapp.com/>
 
+## STACK
+
+React, Context API
+
 ## DESCRIPTION
 
 ## Task
@@ -15,7 +19,7 @@ dev.
 ## Mini plan
 
 - connect Bootstrap to setup
-<https://react-bootstrap.github.io/components/buttons/>
+  <https://react-bootstrap.github.io/components/buttons/>
 
 ## for inspiration
 
@@ -32,11 +36,11 @@ dev.
 ## Questions
 
 - Why bubbling not working (click on a task)
-    the problem was solved by itself
+  the problem was solved by itself
 - alternative find method but without return
-    forEach and return null as break
+  forEach and return null as break
 
-- Why "start" log always  = 0;
+- Why "start" log always = 0;
 - Why my UseState is executing in the end even if "gate is closet".
 - If I re-render DOM with active UseEff (in process). This action iwill clone the useEffect
 
@@ -44,6 +48,6 @@ dev.
 
 ## Bug
 
-- After compute time period for first task, I create a new one  (which as default has status - active) and start time. The result will be wrong;
+- After compute time period for first task, I create a new one (which as default has status - active) and start time. The result will be wrong;
 - I have an opportunity to create or move to task during tme computing (time counting). Need to fix.
 - When I click to SignIn-SignUp toggle. It doesn't occur first time .
